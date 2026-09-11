@@ -1,0 +1,185 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --page: #f7f7f5;
+  --surface: #ffffff;
+  --surface-raised: #ffffff;
+  --text-primary: #0b0b0f;
+  --text-secondary: #55564f;
+  --text-muted: #8b8a83;
+  --border: rgba(11, 11, 15, 0.09);
+  --border-strong: rgba(11, 11, 15, 0.14);
+
+  --accent: #2a63c7;
+  --accent-foreground: #ffffff;
+  --accent-soft: #eaf0fb;
+
+  --positive: #0a8f0a;
+  --positive-soft: #e7f6e8;
+  --negative: #c93a3a;
+  --negative-soft: #fbeaea;
+
+  --ring: #2a63c7;
+}
+
+.dark {
+  --page: #0c0c0d;
+  --surface: #17171a;
+  --surface-raised: #1c1c1f;
+  --text-primary: #f7f7f5;
+  --text-secondary: #c2c1ba;
+  --text-muted: #8b8a83;
+  --border: rgba(255, 255, 255, 0.09);
+  --border-strong: rgba(255, 255, 255, 0.16);
+
+  --accent: #4c8ce8;
+  --accent-foreground: #0c0c0d;
+  --accent-soft: rgba(76, 140, 232, 0.14);
+
+  --positive: #35c157;
+  --positive-soft: rgba(53, 193, 87, 0.14);
+  --negative: #e8685f;
+  --negative-soft: rgba(232, 104, 95, 0.14);
+
+  --ring: #4c8ce8;
+}
+
+@theme inline {
+  --font-sans: var(--font-manrope);
+
+  --color-page: var(--page);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent-soft: var(--accent-soft);
+
+  --color-positive: var(--positive);
+  --color-positive-soft: var(--positive-soft);
+  --color-negative: var(--negative);
+  --color-negative-soft: var(--negative-soft);
+
+  --color-ring: var(--ring);
+}
+
+* {
+  border-color: var(--color-border);
+}
+
+html {
+  color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
+html,
+body {
+  overflow-x: hidden;
+}
+
+body {
+  background: var(--color-page);
+  color: var(--color-text-primary);
+  font-feature-settings: "cv11", "ss01";
+}
+
+::selection {
+  background: var(--color-accent-soft);
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Slim, unobtrusive scrollbars for the app shell */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border-strong) transparent;
+}
+
+/* Restrained, mount-triggered entrance animations (no plugin dependency). */
+@keyframes overlay-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+@keyframes menu-in {
+  from {
+    opacity: 0;
+    transform: scale(0.97) translateY(-2px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+@keyframes sheet-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+@keyframes card-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.anim-overlay {
+  animation: overlay-in 150ms ease-out forwards;
+}
+.anim-pop {
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  animation: pop-in 160ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.anim-menu {
+  animation: menu-in 120ms ease-out forwards;
+}
+.anim-sheet {
+  animation: sheet-up 220ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.anim-card {
+  animation: card-in 300ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .anim-overlay,
+  .anim-pop,
+  .anim-menu,
+  .anim-sheet,
+  .anim-card {
+    animation: none;
+  }
+}

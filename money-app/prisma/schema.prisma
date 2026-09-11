@@ -1,0 +1,87 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
+}
+
+enum CategoryType {
+  EXPENSE
+  INCOME
+  BOTH
+}
+
+enum PaymentMethod {
+  CASH
+  CREDIT_CARD
+  DEBIT_CARD
+  BANK_TRANSFER
+  OTHER
+}
+
+enum RecurrenceFrequency {
+  NONE
+  MONTHLY
+}
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  currency     String   @default("USD")
+  weekStartsOn Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  categories   Category[]
+  transactions Transaction[]
+}
+
+model Category {
+  id        String       @id @default(cuid())
+  userId    String
+  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name      String
+  icon      String
+  color     String
+  type      CategoryType
+  isDefault Boolean      @default(false)
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  transactions Transaction[]
+
+  @@unique([userId, name])
+  @@index([userId])
+}
+
+model Transaction {
+  id                   String              @id @default(cuid())
+  userId               String
+  user                 User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type                 TransactionType
+  amountMinor          Int
+  currency             String
+  categoryId           String?
+  category             Category?           @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  description          String?
+  merchant             String?
+  date                 DateTime
+  paymentMethod        PaymentMethod?
+  notes                String?
+  isRecurring          Boolean             @default(false)
+  recurrenceFrequency  RecurrenceFrequency @default(NONE)
+  createdAt            DateTime            @default(now())
+  updatedAt            DateTime            @updatedAt
+
+  @@index([userId, date])
+  @@index([userId, type, date])
+  @@index([categoryId])
+}
