@@ -3,9 +3,12 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --page: #f7f7f5;
+  --page: #ffffff;
   --surface: #ffffff;
-  --surface-raised: #ffffff;
+  /* Must stay distinct from --surface: this token is the hover/track fill
+     (tab pills, list-row hover, skeletons, progress tracks). When it matched
+     --surface exactly, every one of those was invisible in light mode. */
+  --surface-raised: #f1f1ef;
   --text-primary: #0b0b0f;
   --text-secondary: #55564f;
   --text-muted: #8b8a83;

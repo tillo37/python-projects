@@ -131,3 +131,21 @@ export async function deleteTransaction(id: string): Promise<ActionResult> {
     return fail("Something went wrong while deleting. Please try again.");
   }
 }
+
+/**
+ * Deletes every transaction for the current user, zeroing out all totals.
+ * Categories and profile preferences are deliberately kept — resetting is
+ * about clearing the ledger, not rebuilding the setup from scratch.
+ */
+export async function resetAllTransactions(): Promise<ActionResult<{ deleted: number }>> {
+  try {
+    const user = await getCurrentUser();
+    const { count } = await prisma.transaction.deleteMany({ where: { userId: user.id } });
+
+    revalidatePath("/", "layout");
+    return { success: true, data: { deleted: count } };
+  } catch (err) {
+    console.error("resetAllTransactions failed", err);
+    return fail("Something went wrong while resetting. Please try again.");
+  }
+}
